@@ -8,6 +8,7 @@ class Player {
     this.width = 20;
     this.height = 20;
     this.canFire = true;
+    this.isFiring = false;
     this.facingPosition = {
       up: true,
       left: false,
@@ -43,6 +44,7 @@ class Player {
   update() {
     this.x += this.xspeed;
     this.y += this.yspeed;
+    this.fireLaserBeam();
     this.updateLaserBeamPosition();
   }
 
@@ -82,7 +84,7 @@ class Player {
         this.facingPosition.right = true;
         break;
       case SPACEBAR:
-        this.fireLaserBeam();
+        this.isFiring = true;
         break;
     }
   }
@@ -102,6 +104,9 @@ class Player {
         break;
       case RIGHT_ARROW:
         this.xspeed = 0;
+        break;
+      case SPACEBAR:
+        this.isFiring = false;
         break;
     }
   }
@@ -157,8 +162,7 @@ class Player {
   }
 
   fireLaserBeam() {
-    console.log(this)
-    if (this.facingPosition.up && this.canFire) {
+    if (this.isFiring && this.facingPosition.up && this.canFire) {
       new LaserBeam({
         x: this.laserBeamPosition.x,
         y: this.laserBeamPosition.y + this.laserBeamPosition.height,
@@ -166,7 +170,7 @@ class Player {
       })
       this.canFire = false;
       this.recharge();
-    } else if (this.facingPosition.down && this.canFire) {
+    } else if (this.isFiring && this.facingPosition.down && this.canFire) {
       new LaserBeam({
         x: this.laserBeamPosition.x,
         y: this.laserBeamPosition.y + this.laserBeamPosition.height,
@@ -174,7 +178,7 @@ class Player {
       })
       this.canFire = false;
       this.recharge();
-    } else if (this.facingPosition.left && this.canFire) {
+    } else if (this.isFiring && this.facingPosition.left && this.canFire) {
       new LaserBeam({
         x: this.laserBeamPosition.x,
         y: this.laserBeamPosition.y,
@@ -182,7 +186,7 @@ class Player {
       })
       this.canFire = false;
       this.recharge();
-    } else if (this.facingPosition.right && this.canFire) {
+    } else if (this.isFiring && this.facingPosition.right && this.canFire) {
       new LaserBeam({
         x: this.laserBeamPosition.x,
         y: this.laserBeamPosition.y,
