@@ -11,4 +11,4 @@ app.use(express.static(__dirname + "/public/"));
 app.get('/', (req, resp) => resp.sendFile('index.html'));
 
 // serve application on port 3000 while loging which port we are running on
-app.listen(3000, () => console.log('running on port: 3000'))
+app.listen(process.env.PORT || 3000, () => console.log('running on port: 3000'))
