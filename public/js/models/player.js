@@ -7,6 +7,7 @@ class Player {
     this.color = 'white';
     this.width = 20;
     this.height = 20;
+    this.canFire = true;
     this.facingPosition = {
       up: true,
       left: false,
@@ -15,12 +16,10 @@ class Player {
     }
 
     this.laserBeamPosition = {
-      up: {
-        x: this.x + (this.width / 2) - 2,
-        y: this.y - 10,
-        width: 4,
-        height: 4
-      }
+      x: this.x + (this.width / 2) - 2,
+      y: this.y - 10,
+      width: 4,
+      height: 4
     }
 
     document.addEventListener('keydown', this.move.bind(this));
@@ -57,22 +56,25 @@ class Player {
   move(e) {
     e.preventDefault();
     this.resetSpeed();
-    this.resetFacingPosition();
 
     switch (e.which) {
       case UP_ARROW:
+        this.resetFacingPosition();
         this.yspeed = -1;
         this.facingPosition.up = true;
         break;
       case DOWN_ARROW:
+        this.resetFacingPosition();
         this.yspeed = 1;
         this.facingPosition.down = true;
         break;
       case LEFT_ARROW:
+        this.resetFacingPosition();
         this.xspeed = -1;
         this.facingPosition.left = true;
         break;
       case RIGHT_ARROW:
+        this.resetFacingPosition();
         this.xspeed = 1;
         this.facingPosition.right = true;
         break;
@@ -110,25 +112,81 @@ class Player {
     // }
 
     ctx.fillStyle = 'green';
-    ctx.fillRect(this.laserBeamPosition.up.x, this.laserBeamPosition.up.y, this.laserBeamPosition.up.width, this.laserBeamPosition.up.height);
+    ctx.fillRect(this.laserBeamPosition.x, this.laserBeamPosition.y, this.laserBeamPosition.width, this.laserBeamPosition.height);
   }
 
   updateLaserBeamPosition() {
-    this.laserBeamPosition = {
-      up: {
+    if (this.facingPosition.up) {
+      this.laserBeamPosition = {
         x: this.x + (this.width / 2) - 2,
         y: this.y - 10,
+        width: 4,
+        height: 4
+      }
+    } else if (this.facingPosition.down) {
+      this.laserBeamPosition = {
+        x: this.x + (this.width / 2) - 2,
+        y: this.y + this.height + 5,
+        width: 4,
+        height: 4
+      }
+    } else if (this.facingPosition.left) {
+      this.laserBeamPosition = {
+        x: this.x - 10,
+        y: this.y + (this.height / 2) - 2,
+        width: 4,
+        height: 4
+      }
+    } else if (this.facingPosition.right) {
+      this.laserBeamPosition = {
+        x: this.x + this.width + 7,
+        y: this.y + (this.height / 2) - 2,
         width: 4,
         height: 4
       }
     }
   }
 
-  drawLaserBeam() {
-
+  recharge() {
+    setTimeout(() => {
+      this.canFire = true;
+    }, 250);
   }
 
   fireLaserBeam() {
-
+    console.log(this)
+    if (this.facingPosition.up && this.canFire) {
+      new LaserBeam({
+        x: this.laserBeamPosition.x,
+        y: this.laserBeamPosition.y + this.laserBeamPosition.height,
+        facing: 'up'
+      })
+      this.canFire = false;
+      this.recharge();
+    } else if (this.facingPosition.down && this.canFire) {
+      new LaserBeam({
+        x: this.laserBeamPosition.x,
+        y: this.laserBeamPosition.y + this.laserBeamPosition.height,
+        facing: 'down'
+      })
+      this.canFire = false;
+      this.recharge();
+    } else if (this.facingPosition.left && this.canFire) {
+      new LaserBeam({
+        x: this.laserBeamPosition.x,
+        y: this.laserBeamPosition.y,
+        facing: 'left'
+      })
+      this.canFire = false;
+      this.recharge();
+    } else if (this.facingPosition.right && this.canFire) {
+      new LaserBeam({
+        x: this.laserBeamPosition.x,
+        y: this.laserBeamPosition.y,
+        facing: 'right'
+      })
+      this.canFire = false;
+      this.recharge();
+    }
   }
 }

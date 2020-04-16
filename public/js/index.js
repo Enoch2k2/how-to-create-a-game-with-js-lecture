@@ -31,7 +31,7 @@ function draw() {
   clearBackground();
   drawBackground();
   player.draw();
-  console.log(player.facingPosition)
+  LaserBeam.drawAll();
   animate(draw);
 }
 
