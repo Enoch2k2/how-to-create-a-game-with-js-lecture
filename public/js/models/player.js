@@ -55,25 +55,28 @@ class Player {
 
   move(e) {
     e.preventDefault();
-    this.resetSpeed();
 
     switch (e.which) {
       case UP_ARROW:
+        this.resetSpeed();
         this.resetFacingPosition();
         this.yspeed = -1;
         this.facingPosition.up = true;
         break;
       case DOWN_ARROW:
+        this.resetSpeed();
         this.resetFacingPosition();
         this.yspeed = 1;
         this.facingPosition.down = true;
         break;
       case LEFT_ARROW:
+        this.resetSpeed();
         this.resetFacingPosition();
         this.xspeed = -1;
         this.facingPosition.left = true;
         break;
       case RIGHT_ARROW:
+        this.resetSpeed();
         this.resetFacingPosition();
         this.xspeed = 1;
         this.facingPosition.right = true;
